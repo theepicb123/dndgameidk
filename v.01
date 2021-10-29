@@ -1,0 +1,119 @@
+var createBox = function (x, y, sizeX, sizeY, allowForBar, group, text, textSize) {
+    var square1 = new Shape.Rectangle({
+        size: [sizeX, sizeY],
+        point: [x - sizeX/2, y - sizeY/2],
+        fillColor: "black"
+        });
+    var square2 = new Shape.Rectangle({
+        point: [(x - sizeX/2) + 5, (y - sizeY/2) + 5],
+        size:[sizeX - 10, sizeY - 10],
+        fillColor: "white"
+    });
+    
+    var text = new PointText({
+        point: [x, y],
+        content: text,
+        fontSize: textSize,
+        fontColor: "black"
+    });
+    
+    text.position.x = text.position.x - text.bounds.width / 2
+    
+    if (allowForBar === false) {
+        text.position.y = text.position.y + text.bounds.height / 4
+    }
+    
+};
+
+var createBoxStretchy = function (x, y, allowForBar, group, text, textSize) {
+    var text = new PointText({
+        point: [x, y],
+        content: text,
+        fontColor: "black"
+    });
+    if (textSize === "small"){
+    text.fontSize = 10; 
+    }   else if (textSize === "medium") {
+        text.fontSize = 20;
+    } else if (textSize === "large") {
+        text.fontSize = 30;
+    }
+    text.position.x = text.position.x - text.bounds.width / 2
+    
+
+    var square1 = new Shape.Rectangle({
+        size: [text.bounds.width + 20, text.bounds.height + 15],
+        point: [(x - text.bounds.width/2) - 10, ((y))],
+        fillColor: "black"
+        });
+    var square2 = new Shape.Rectangle({
+        point: [(x - text.bounds.width/2) - 5, ((y)  + 5 )],
+        size:[(text.bounds.width) + 10 , text.bounds.height + 5],
+        fillColor: "white"
+    });
+    text.bringToFront();
+        if (textSize === "small"){
+    square1.position.y = square1.position.y - 16;
+    square2.position.y = square1.position.y ;
+    }   else if (textSize === "medium") {
+        square1.position.y = square1.position.y - 24;
+        square2.position.y = square1.position.y ;
+    } else if (textSize === "large") {
+        square1.position.y = square1.position.y - 34;
+    square2.position.y = square1.position.y;
+    }
+    return group.addChildren([square1, square2, text]);
+    
+};
+
+var Menu = new Group();
+
+var Back = new Group()
+
+var UI = new Group();
+
+var Village1 = new Group();
+
+var generateUI = function () {
+        var UIBackground2 = new Shape.Rectangle(0,0, view.center.x * 2, view.center.y * 2);
+    UIBackground2.fillColor = "white";
+    
+    var UIBackground1 = new Shape.Rectangle(0, 0, view.center.x *2, view.center.y *2);
+    UIBackground1.strokeColor = "black";
+    UIBackground1.strokeWidth = 10;
+    
+
+    
+    Menu.sendToBack();
+    
+    var text1 = new PointText(view.center.x - 30, 50);
+    text1.content = "Menu";
+    text1.fontSize = 50;
+    
+    UI.addChildren([UIBackground2, UIBackground1, text1])
+    
+    createBoxStretchy(50, 50, false, Back, "back", "large");
+    Back.bringToFront();
+    
+    }
+
+
+var createMenuButton = function () {
+createBoxStretchy((view.center.x * 2) - 550, 50, false, Menu, "Menu", "large");
+}
+createMenuButton()
+Menu.onMouseDown = function (event) {
+    
+    generateUI();
+    Menu.children = ([])
+    
+    
+}
+
+Back.onMouseDown = function () {
+    UI.children = ([])
+    Back.children = ([]);
+    createMenuButton();
+    
+}
+console.log(Menu.children)
